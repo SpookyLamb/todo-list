@@ -1,11 +1,11 @@
-// Must Have
+// Must Have (DONE)
   // Repo created from Vite - not the bootcamp prebuilt template (DONE)
   // Deploy to Vercel (DONE)
-  // Wireframe - in addition to the design wireframe, design information (state) flow
-  // Responsive design 
+  // Wireframe - in addition to the design wireframe, design information (state) flow (DONE)
+  // Responsive design (DONE?)
   // Dynamically render the content with React using components (DONE)
-  // C.R.U.D. for list items
-  // Save all data in Local Storage
+  // C.R.U.D. for list items (DONE)
+  // Save all data in Local Storage (DONE)
 // Should Have
   // Three "views" for the user: All, Completed, & To-Do (not completed)
   // Completed items are crossed out or checked off
@@ -13,7 +13,6 @@
 // Could Have
   // ‘Archive’ items instead of delete.  (soft delete)  Should move items to an archive list that they can be restored from. 
   // Check off or cross out all items in one click as a "completed all" function
-  // Use useContext and useReducer to manage state
   // Animations/sound/etc. to celebrate item completion
 // Wish List
   // Undo button - should ‘undo’ whatever the last action was.  For example, archive item, unarchive item, check complete, create item, update item, uncheck complete, etc. 

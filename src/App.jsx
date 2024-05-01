@@ -1,6 +1,10 @@
-import { useState } from 'react'
-import { useReducer } from 'react'
 import './App.css'
+
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { useReducer } from 'react'
+
+import { v4 as uuidv4 } from 'uuid'
 
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
@@ -13,12 +17,60 @@ import Button from "react-bootstrap/Button"
   //Tasks
     //ID - String
     //Title - String
-    //Description - String
-    //DateCreated - Date
-    //DueDate - Date
-    //Category/Label - String
     //Completed - Bool
-  //TaskTracker
+  //TaskManager
+// Create, Read, Update, Delete
+
+//Functions below
+
+function loadData() {
+  const data = localStorage.getItem("tasks")
+  const parsed = JSON.parse(data)
+
+  if (parsed) { //invalid data is ignored
+    return parsed
+  } else {
+    saveData([])
+    return []
+  }
+}
+
+function saveData(tasks) {
+  const jsonData = JSON.stringify(tasks)
+
+  localStorage.setItem("tasks", jsonData)
+}
+
+function constructTaskElements(new_tasks) {
+  let task_elements = []
+
+  //construct a new array of task elements, accordingly
+  for (let i = 0; i < new_tasks.length; i++) {
+    let object = new_tasks[i]
+    task_elements.push(<Task title={object.title} complete={object.complete} key={object.id}/>)
+  }
+
+  return task_elements
+}
+
+//Components below
+
+function Nuke(props) {
+  const setTasks = props.function
+  const setTaskElements = props.elementFunction
+
+  function deleteAll() { //tabula rasa
+    saveData([])
+    setTasks([])
+    setTaskElements([])
+  }
+
+  return (
+    <Row>
+      <Button onClick={deleteAll}>Clear All</Button>
+    </Row>
+  )
+}
 
 function Task(props) {
   const title = props.title
@@ -41,24 +93,19 @@ function TaskInput(props) {
     const input_field = document.getElementById("task-input")
     const input = input_field.value
     input_field.value = "" //clear the input
+    
     let new_tasks = Array.from(tasks)
 
     //add a new task to our saved list
     new_tasks.push( {
       title: input,
+      id: uuidv4(),
+      complete: false,
     } )
 
     setTasks(new_tasks)
-
-    let task_elements = []
-
-    //construct a new array of task elements, accordingly
-    for (let i = 0; i < new_tasks.length; i++) {
-      let object = new_tasks[i]
-      task_elements.push(<Task title={object.title} />)
-    }
-
-    setTaskElements(task_elements)
+    saveData(new_tasks)
+    setTaskElements(constructTaskElements(new_tasks))
   }
 
   function keyCheck(event) { //check for the enter key, don't bother with other keys
@@ -89,15 +136,36 @@ function TaskList(props) {
   )
 }
 
+function TaskManager() {
+  return (
+    <Row>
+      Task Manager
+    </Row>
+  )
+}
+
+function Title() {
+  //that really is the title it's not a note
+
+  return(
+    <h1>TO DO</h1>
+  )
+}
+
 function App() {
-  const [tasks, setTasks] = useState([])
-  const [taskElements, setTaskElements] = useState([])
+  const [tasks, setTasks] = useState(loadData())
+  const [taskElements, setTaskElements] = useState(constructTaskElements(tasks))
 
   return (
-    <Container>
-      <TaskInput state={tasks} function={setTasks} elementFunction={setTaskElements}/>
-      <TaskList state={taskElements} />
-    </Container>
+    <>
+      <Title />
+      <Container>
+        <TaskInput state={tasks} function={setTasks} elementFunction={setTaskElements}/>
+        <TaskList state={taskElements} />
+        <TaskManager />
+        <Nuke function={setTasks} elementFunction={setTaskElements}/>
+      </Container>
+    </>
   )
 }
 
