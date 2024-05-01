@@ -1,11 +1,11 @@
 // Must Have
+  // Repo created from Vite - not the bootcamp prebuilt template (DONE)
+  // Deploy to Vercel (DONE)
   // Wireframe - in addition to the design wireframe, design information (state) flow
-  // Responsive design
-  // Dynamically render the content with React using components
+  // Responsive design 
+  // Dynamically render the content with React using components (DONE)
   // C.R.U.D. for list items
   // Save all data in Local Storage
-  // Repo created from Vite - not the bootcamp prebuilt template
-  // Deploy to Vercel
 // Should Have
   // Three "views" for the user: All, Completed, & To-Do (not completed)
   // Completed items are crossed out or checked off
@@ -26,6 +26,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
