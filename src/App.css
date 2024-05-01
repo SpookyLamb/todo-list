@@ -4,3 +4,10 @@
   padding: 2rem;
   text-align: center;
 }
+
+.task-list {
+  max-height: 60vh;
+  max-width: 95vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

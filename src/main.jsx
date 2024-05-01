@@ -6,14 +6,17 @@
   // Dynamically render the content with React using components (DONE)
   // C.R.U.D. for list items (DONE)
   // Save all data in Local Storage (DONE)
+  
 // Should Have
-  // Three "views" for the user: All, Completed, & To-Do (not completed)
   // Completed items are crossed out or checked off
-  // Each view should have a total count
+  // Three "views" for the user: All, Completed, & To-Do (not completed)
+    // Each view should have a total count
+
 // Could Have
   // ‘Archive’ items instead of delete.  (soft delete)  Should move items to an archive list that they can be restored from. 
   // Check off or cross out all items in one click as a "completed all" function
   // Animations/sound/etc. to celebrate item completion
+
 // Wish List
   // Undo button - should ‘undo’ whatever the last action was.  For example, archive item, unarchive item, check complete, create item, update item, uncheck complete, etc. 
   // Keyboard shortcuts for CRUD actions. 

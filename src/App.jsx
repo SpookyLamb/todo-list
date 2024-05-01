@@ -76,7 +76,7 @@ function Task(props) {
   const title = props.title
 
   return (
-    <Row>
+    <Row className="px-4">
       {title}
     </Row>
   )
@@ -130,16 +130,20 @@ function TaskList(props) {
   const taskElements = props.state
 
   return (
-    <Container>
+    <Container className="task-list py-3 px-1">
       {taskElements}
     </Container>
   )
 }
 
-function TaskManager() {
+function TaskManager(props) {
+  const setTasks = props.function
+  const setTaskElements = props.elementFunction
+
   return (
     <Row>
       Task Manager
+      <Nuke function={setTasks} elementFunction={setTaskElements}/>
     </Row>
   )
 }
@@ -159,11 +163,10 @@ function App() {
   return (
     <>
       <Title />
-      <Container>
+      <Container className="p-5 border">
         <TaskInput state={tasks} function={setTasks} elementFunction={setTaskElements}/>
         <TaskList state={taskElements} />
-        <TaskManager />
-        <Nuke function={setTasks} elementFunction={setTaskElements}/>
+        <TaskManager function={setTasks} elementFunction={setTaskElements}/>
       </Container>
     </>
   )
