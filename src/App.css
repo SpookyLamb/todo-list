@@ -11,3 +11,11 @@
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.clean {
+  text-decoration: none;
+}

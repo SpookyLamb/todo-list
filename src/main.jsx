@@ -8,7 +8,7 @@
   // Save all data in Local Storage (DONE)
   
 // Should Have
-  // Completed items are crossed out or checked off
+  // Completed items are crossed out or checked off (DONE)
   // Three "views" for the user: All, Completed, & To-Do (not completed)
     // Each view should have a total count
 

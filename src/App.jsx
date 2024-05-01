@@ -23,6 +23,8 @@ import Button from "react-bootstrap/Button"
 
 //Functions below
 
+let globalSetTasks, globalSetTaskElements
+
 function loadData() {
   const data = localStorage.getItem("tasks")
   const parsed = JSON.parse(data)
@@ -47,17 +49,32 @@ function constructTaskElements(new_tasks) {
   //construct a new array of task elements, accordingly
   for (let i = 0; i < new_tasks.length; i++) {
     let object = new_tasks[i]
-    task_elements.push(<Task title={object.title} complete={object.complete} key={object.id}/>)
+    task_elements.push(<Task title={object.title} complete={object.complete} key={object.id} id={object.id}/>)
   }
 
   return task_elements
 }
 
+function changeCompletion(id, completed) {
+  //searches the existing data for the object with a matching key, then changes its completion status and saves it
+  let tasks = loadData()
+  
+  for (let i = 0; i < tasks.length; i++) {
+    let object = tasks[i]
+    
+    if (object.id === id) {
+      object.complete = completed
+    }
+  }
+
+  saveData(tasks)
+}
+
 //Components below
 
-function Nuke(props) {
-  const setTasks = props.function
-  const setTaskElements = props.elementFunction
+function Nuke() {
+  const setTasks = globalSetTasks
+  const setTaskElements = globalSetTaskElements
 
   function deleteAll() { //tabula rasa
     saveData([])
@@ -74,18 +91,51 @@ function Nuke(props) {
 
 function Task(props) {
   const title = props.title
+  const id = props.id
+  let complete = props.complete
+  let initstyle = ""
+
+  if (complete) {
+    initstyle = "strikethrough"
+  } else {
+    initstyle = "clean"
+  }
+
+  const [checked, setCheck] = useState(complete)
+  const [style, setStyle] = useState(initstyle)
+
+  function checkOff() {
+    //needs to update the visuals of the check box and the title
+    //and also update the stored data
+
+    complete = !complete //flip
+    setCheck(complete)
+    changeCompletion(id, complete)
+
+    //handle strikethrough
+    if (complete) {
+      setStyle("strikethrough")
+    } else {
+      setStyle("clean")
+    }
+  }
 
   return (
     <Row className="px-4">
-      {title}
+      <Col className="col-2">
+        <input onChange={checkOff} type="checkbox" checked={checked}></input>
+      </Col>
+      <Col className="col-10 text-start">
+        <p className={style}>{title}</p>
+      </Col>
     </Row>
   )
 }
 
 function TaskInput(props) {
   const tasks = props.state
-  const setTasks = props.function
-  const setTaskElements = props.elementFunction
+  const setTasks = globalSetTasks
+  const setTaskElements = globalSetTaskElements
 
   function addTask() {
     //takes input and adds a new task with setTasks, a state/hook function
@@ -136,14 +186,12 @@ function TaskList(props) {
   )
 }
 
-function TaskManager(props) {
-  const setTasks = props.function
-  const setTaskElements = props.elementFunction
+function TaskManager() {
 
   return (
     <Row>
       Task Manager
-      <Nuke function={setTasks} elementFunction={setTaskElements}/>
+      <Nuke />
     </Row>
   )
 }
@@ -160,13 +208,16 @@ function App() {
   const [tasks, setTasks] = useState(loadData())
   const [taskElements, setTaskElements] = useState(constructTaskElements(tasks))
 
+  globalSetTasks = setTasks
+  globalSetTaskElements = setTaskElements
+
   return (
     <>
       <Title />
       <Container className="p-5 border">
-        <TaskInput state={tasks} function={setTasks} elementFunction={setTaskElements}/>
+        <TaskInput state={tasks} />
         <TaskList state={taskElements} />
-        <TaskManager function={setTasks} elementFunction={setTaskElements}/>
+        <TaskManager />
       </Container>
     </>
   )
