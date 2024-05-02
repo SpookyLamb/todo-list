@@ -9,7 +9,7 @@
   
 // Should Have
   // Completed items are crossed out or checked off (DONE)
-  // Three "views" for the user: All, Completed, & To-Do (not completed)
+  // Three "views" for the user: All, Completed, & To-Do 
     // Each view should have a total count
 
 // Could Have

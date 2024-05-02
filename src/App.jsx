@@ -21,9 +21,15 @@ import Button from "react-bootstrap/Button"
   //TaskManager
 // Create, Read, Update, Delete
 
+//to edit:
+// give each element an edit button that turns on editing mode and makes the input field grab keyboard focus with .focus()
+
 //Functions below
 
-let globalSetTasks, globalSetTaskElements
+let globalSetTasks, globalSetTaskElements, globalSetTaskCount;
+
+let editing = false;
+let edit_id = "";
 
 function loadData() {
   const data = localStorage.getItem("tasks")
@@ -70,16 +76,26 @@ function changeCompletion(id, completed) {
   saveData(tasks)
 }
 
+function handleTasks(new_tasks) {
+  const setTasks = globalSetTasks
+  const setTaskElements = globalSetTaskElements
+  const setTaskCount = globalSetTaskCount
+
+  setTasks(new_tasks)
+  saveData(new_tasks)
+  setTaskElements(constructTaskElements(new_tasks))
+  setTaskCount(new_tasks.length)
+}
+
 //Components below
 
 function Nuke() {
   const setTasks = globalSetTasks
   const setTaskElements = globalSetTaskElements
+  const setTaskCount = globalSetTaskCount
 
   function deleteAll() { //tabula rasa
-    saveData([])
-    setTasks([])
-    setTaskElements([])
+    handleTasks([])
   }
 
   return (
@@ -120,13 +136,44 @@ function Task(props) {
     }
   }
 
+  function editMode() {
+    const input = document.getElementById("task-input")
+    input.value = title
+
+    editing = true
+    edit_id = id
+
+    input.focus()
+  }
+
+  function deleteMe() {
+    const tasks = loadData()
+
+    let new_tasks = Array.from(tasks)
+
+    for (let i = 0; i < new_tasks.length; i++) {
+      let task = new_tasks[i]
+
+      if (task.id === id) {
+        new_tasks.splice(i, 1) //remove the element
+
+        handleTasks(new_tasks)
+        break;
+      }
+    }
+  }
+
   return (
     <Row className="px-4">
       <Col className="col-2">
         <input onChange={checkOff} type="checkbox" checked={checked}></input>
       </Col>
-      <Col className="col-10 text-start">
+      <Col className="col-8 text-start">
         <p className={style}>{title}</p>
+      </Col>
+      <Col className="col-2 d-flex justify-content-end">
+        <a className="pe-1" onClick={editMode} href="#">Edit</a>
+        <a className="ps-1" onClick={deleteMe} href="#">Delete</a>
       </Col>
     </Row>
   )
@@ -134,8 +181,6 @@ function Task(props) {
 
 function TaskInput(props) {
   const tasks = props.state
-  const setTasks = globalSetTasks
-  const setTaskElements = globalSetTaskElements
 
   function addTask() {
     //takes input and adds a new task with setTasks, a state/hook function
@@ -143,19 +188,42 @@ function TaskInput(props) {
     const input_field = document.getElementById("task-input")
     const input = input_field.value
     input_field.value = "" //clear the input
+
+    if (!input) { //empty string, ignore
+      return 
+    }
     
     let new_tasks = Array.from(tasks)
 
-    //add a new task to our saved list
-    new_tasks.push( {
-      title: input,
-      id: uuidv4(),
-      complete: false,
-    } )
+    if (editing) {
+      //edit an existing task using edit_id
 
-    setTasks(new_tasks)
-    saveData(new_tasks)
-    setTaskElements(constructTaskElements(new_tasks))
+      for (let i = 0; i < new_tasks.length; i++) {
+        let task = new_tasks[i]
+
+        if (task.id === edit_id) {
+          new_tasks[i] = {
+            title: input,
+            id: edit_id,
+            complete: false,
+          }
+
+          break;
+        }
+      }
+
+      editing = false //reset vars when done
+      edit_id = ""
+    } else {
+      //add a new task to our saved list
+      new_tasks.push( {
+        title: input,
+        id: uuidv4(),
+        complete: false,
+      } )
+    }
+
+    handleTasks(new_tasks)
   }
 
   function keyCheck(event) { //check for the enter key, don't bother with other keys
@@ -165,12 +233,12 @@ function TaskInput(props) {
   }
 
   return (
-    <Row>
-      <Col className="col-8">
+    <Row className="py-4 px-2">
+      <Col className="col-12 py-2 px-3 mx-auto d-flex justify-content-center">
         <input onKeyUp={keyCheck} type="text" id="task-input"></input>
-      </Col>
-      <Col className="col-4">
-        <Button onClick={addTask}>ADD</Button>
+        <div className="ps-2">
+          <Button onClick={addTask}>-&gt;</Button>
+        </div>
       </Col>
     </Row>
   )
@@ -180,19 +248,41 @@ function TaskList(props) {
   const taskElements = props.state
 
   return (
-    <Container className="task-list py-3 px-1">
+    <Container className="task-list py-2 px-1">
       {taskElements}
     </Container>
   )
 }
 
 function TaskManager() {
+  const [task_count, setTaskCount] = useState(loadData().length)
+
+  globalSetTaskCount = setTaskCount
+
+  function deleteCompleted() {
+  }
 
   return (
-    <Row>
-      Task Manager
-      <Nuke />
+    <>
+    <Row className="px-1 py-1">
+      <Col className='col-12 d-flex justify-content-center'>
+        <p className='my-auto'>{task_count + " Left"}</p>
+        <Button variant="link" onClick={deleteCompleted}>Clear Completed</Button>
+      </Col>
     </Row>
+    <Row className="d-flex justify-content-center px-1 py-1">
+      <Col className="col-12">
+        <Button variant="link">All</Button>
+        <Button variant="link">Active</Button>
+        <Button variant="link">Completed</Button>
+      </Col>
+    </Row>
+    <Row>
+      <Col className='mx-auto col-6 px-5 py-1'>
+        <Nuke />
+      </Col>
+    </Row>
+    </>
   )
 }
 
@@ -214,7 +304,7 @@ function App() {
   return (
     <>
       <Title />
-      <Container className="p-5 border">
+      <Container className="p-1 border container-fluid">
         <TaskInput state={tasks} />
         <TaskList state={taskElements} />
         <TaskManager />
