@@ -256,22 +256,59 @@ function TaskList(props) {
 
 function TaskManager() {
   const [task_count, setTaskCount] = useState(loadData().length)
+  const [all_disabled, setAllDisabled] = useState(true) //starts in the all view by default
+  const [active_disabled, setActiveDisabled] = useState(false)
+  const [completed_disabled, setCompletedDisabled] = useState(false)
 
   globalSetTaskCount = setTaskCount
 
   function deleteCompleted() {
     const tasks = loadData()
-    let new_tasks = Array.from(tasks)
-
-    for (let i = tasks.length - 1; i >= 0; i--) { //done in reverse order to prevent index bugs
-      let task = tasks[i]
-
-      if (task.complete === true) {
-        new_tasks.splice(i, 1)
+    const new_tasks = tasks.filter((task) => {
+      if (!task.complete) {
+        return task
       }
-    }
+    })
 
     handleTasks(new_tasks)
+  }
+
+  function displayTab(tab) {
+    //updates task elements specifically without touching the actual underlying data
+    //needs to also disable the relevant button
+    const setTaskElements = globalSetTaskElements
+    const setTaskCount = globalSetTaskCount
+
+    setAllDisabled(false) //enable all by default
+    setActiveDisabled(false)
+    setCompletedDisabled(false)
+
+    let new_tasks = loadData()
+
+    switch (tab) {
+      case "active":
+        new_tasks = new_tasks.filter((task) => {
+          if (!task.complete) {
+            return task
+          }
+        })
+        setActiveDisabled(true)
+        break;
+      case "complete":
+        new_tasks = new_tasks.filter((task) => {
+          if (task.complete) {
+            return task
+          }
+        })
+        setCompletedDisabled(true)
+        break;
+      default: //all
+        setAllDisabled(true)
+        break;
+    }
+
+    setTaskElements(constructTaskElements(new_tasks))
+    setTaskCount(new_tasks.length)
   }
 
   return (
@@ -284,9 +321,9 @@ function TaskManager() {
     </Row>
     <Row className="d-flex justify-content-center px-1 py-1">
       <Col className="col-12">
-        <Button variant="link">All</Button>
-        <Button variant="link">Active</Button>
-        <Button variant="link">Completed</Button>
+        <Button variant="link" onClick={() => {displayTab("all")}} disabled={all_disabled}>All</Button>
+        <Button variant="link" onClick={() => {displayTab("active")}} disabled={active_disabled}>Active</Button>
+        <Button variant="link" onClick={() => {displayTab("complete")}} disabled={completed_disabled}>Completed</Button>
       </Col>
     </Row>
     <Row>

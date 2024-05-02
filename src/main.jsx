@@ -9,8 +9,8 @@
   
 // Should Have
   // Completed items are crossed out or checked off (DONE)
-  // Three "views" for the user: All, Completed, & To-Do 
-    // Each view should have a total count
+  // Three "views" for the user: All, Completed, & To-Do (DONE)
+    // Each view should have a total count (DONE)
 
 // Could Have
   // ‘Archive’ items instead of delete.  (soft delete)  Should move items to an archive list that they can be restored from. 
