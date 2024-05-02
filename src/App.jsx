@@ -260,6 +260,18 @@ function TaskManager() {
   globalSetTaskCount = setTaskCount
 
   function deleteCompleted() {
+    const tasks = loadData()
+    let new_tasks = Array.from(tasks)
+
+    for (let i = tasks.length - 1; i >= 0; i--) { //done in reverse order to prevent index bugs
+      let task = tasks[i]
+
+      if (task.complete === true) {
+        new_tasks.splice(i, 1)
+      }
+    }
+
+    handleTasks(new_tasks)
   }
 
   return (
