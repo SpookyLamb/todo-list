@@ -1,3 +1,32 @@
+body {
+  background: rgb(62,23,88) !important;
+  background: linear-gradient(0deg, rgba(76, 60, 85, 1) 0%, rgba(133, 63, 170, 1) 50%, rgba(170, 10, 255, 1) 100%) !important;
+}
+
+a {
+  color: rgba(170, 10, 255, 1) !important;
+}
+
+a:hover {
+  color: rgba(133, 63, 170, 1) !important;
+}
+
+.btn-link {
+  color: rgba(170, 10, 255, 1) !important;
+}
+
+.btn-link:hover {
+  color: rgba(133, 63, 170, 1) !important;
+}
+
+h1, p {
+  color: rgba(240,240,240,1) !important;
+}
+
+h1 {
+  text-shadow: 4px 4px 8px rgb(15,15,15);
+}
+
 #root {
   width: 100%;
   max-width: 650px;
@@ -9,6 +38,23 @@
 #task-input {
   width: 40vw;
   max-width: 200px;
+}
+
+.btn-primary {
+  background: rgba(170, 10, 255, 1) !important;
+  border-color: rgba(76, 60, 85, 1) !important;
+}
+
+.main-box {
+  background-color: rgba(49, 45, 51, 0.9);
+}
+
+.box-shadow {
+  box-shadow: 5px 5px 5px rgb(15,15,15);
+}
+
+.text-shadow {
+  text-shadow: 1px 1px 4px rgb(15,15,15);
 }
 
 .task-list {

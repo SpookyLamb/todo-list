@@ -115,7 +115,7 @@ function Nuke(props) {
 
   return (
     <Row>
-      <Button onClick={deleteAll}>Clear All</Button>
+      <Button className="main-box box-shadow" onClick={deleteAll}>Clear All</Button>
     </Row>
   )
 }
@@ -146,6 +146,7 @@ function Task(props) {
     //handle strikethrough
     if (complete) {
       setStyle("strikethrough")
+      document.getElementById('party-blower').play()
     } else {
       setStyle("clean")
     }
@@ -251,11 +252,11 @@ function TaskInput() {
 
   return (
     <Container className="py-4 px-2">
-      <Row className='py-2 border'>
+      <Row className='py-2 border border-dark main-box box-shadow'>
         <Col className="col-12 py-2 px-3 mx-auto d-flex justify-content-center">
-          <input onKeyUp={keyCheck} type="text" id="task-input"></input>
+          <input className="box-shadow" onKeyUp={keyCheck} type="text" id="task-input"></input>
           <div className="ps-2">
-            <Button onClick={addTask}>-&gt;</Button>
+            <Button className="box-shadow" onClick={addTask}>-&gt;</Button>
           </div>
         </Col>
       </Row>
@@ -267,7 +268,7 @@ function TaskList(props) {
   const taskElements = props.state
 
   return (
-    <Container className="task-list py-2 px-1 border" id="the-task-list">
+    <Container className="task-list py-2 px-1 border border-dark main-box box-shadow" id="the-task-list">
       {taskElements}
     </Container>
   )
@@ -336,7 +337,7 @@ function TaskManager() {
   return (
     <>
       <Container>
-        <Row className="d-flex justify-content-center px-1 py-1 border border-top-0">
+        <Row className="d-flex justify-content-center px-1 py-1 border border-dark border-top-0 main-box box-shadow">
           <Col className="col-12">
             <Button variant="link" onClick={() => {displayTab("all")}} disabled={all_disabled}>All</Button>
             <Button variant="link" onClick={() => {displayTab("active")}} disabled={active_disabled}>Active</Button>
@@ -345,7 +346,7 @@ function TaskManager() {
         </Row>
       </Container>
       <Container className="py-3">
-        <Row className="px-1 py-1 border">
+        <Row className="px-1 py-1 border border-dark main-box box-shadow">
           <Col className='col-12 d-flex justify-content-center'>
             <p className='my-auto'>{task_count + " Left"}</p>
             <Button variant="link" onClick={deleteCompleted}>Clear Completed</Button>
