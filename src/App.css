@@ -1,6 +1,6 @@
 #root {
   width: 100%;
-  max-width: 800px;
+  max-width: 650px;
   margin: 0 auto;
   padding: 1rem;
   text-align: center;
@@ -12,8 +12,7 @@
 }
 
 .task-list {
-  max-height: 60vh;
-  max-width: 95vw;
+  max-height: 50vh;
   overflow-y: scroll;
   overflow-x: hidden;
 }

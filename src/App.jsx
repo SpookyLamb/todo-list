@@ -26,10 +26,12 @@ import Button from "react-bootstrap/Button"
 
 //Functions below
 
-let globalSetTasks, globalSetTaskElements, globalSetTaskCount;
+let globalSetTasks, globalSetTaskElements, globalSetTaskCount, globalDisplayTab;
 
 let editing = false;
 let edit_id = "";
+
+let current_tab = "all";
 
 function loadData() {
   const data = localStorage.getItem("tasks")
@@ -55,7 +57,7 @@ function constructTaskElements(new_tasks) {
   //construct a new array of task elements, accordingly
   for (let i = 0; i < new_tasks.length; i++) {
     let object = new_tasks[i]
-    task_elements.push(<Task title={object.title} complete={object.complete} key={object.id} id={object.id}/>)
+    task_elements.push(<Task title={object.title} complete={object.complete} id={object.id} key={object.id}/>)
   }
 
   return task_elements
@@ -83,19 +85,32 @@ function handleTasks(new_tasks) {
 
   setTasks(new_tasks)
   saveData(new_tasks)
-  setTaskElements(constructTaskElements(new_tasks))
-  setTaskCount(new_tasks.length)
+  setTaskCount(getTaskCount())
+
+  const task_elements = constructTaskElements(new_tasks)
+  setTaskElements(task_elements)
+}
+
+function getTaskCount() {
+  const tasks = loadData()
+  let active_tasks = tasks.filter((task) => {
+    if (!task.complete) {
+      return task
+    }
+  })
+  return active_tasks.length
 }
 
 //Components below
 
-function Nuke() {
-  const setTasks = globalSetTasks
-  const setTaskElements = globalSetTaskElements
-  const setTaskCount = globalSetTaskCount
+function Nuke(props) {
+  const displayTab = props.tabfunc
 
   function deleteAll() { //tabula rasa
+    //updates all of the elements
+    //needs to also update the visuals -- TODO
     handleTasks([])
+    displayTab("all")
   }
 
   return (
@@ -134,6 +149,9 @@ function Task(props) {
     } else {
       setStyle("clean")
     }
+
+    globalDisplayTab(current_tab) //redraw the current tab so items disappear accordingly
+    globalSetTaskCount(getTaskCount()) //reset task count
   }
 
   function editMode() {
@@ -164,7 +182,7 @@ function Task(props) {
   }
 
   return (
-    <Row className="px-4">
+    <Row className="px-4 py-1">
       <Col className="col-2">
         <input onChange={checkOff} type="checkbox" checked={checked}></input>
       </Col>
@@ -179,8 +197,7 @@ function Task(props) {
   )
 }
 
-function TaskInput(props) {
-  const tasks = props.state
+function TaskInput() {
 
   function addTask() {
     //takes input and adds a new task with setTasks, a state/hook function
@@ -193,7 +210,7 @@ function TaskInput(props) {
       return 
     }
     
-    let new_tasks = Array.from(tasks)
+    let new_tasks = loadData()
 
     if (editing) {
       //edit an existing task using edit_id
@@ -233,14 +250,16 @@ function TaskInput(props) {
   }
 
   return (
-    <Row className="py-4 px-2">
-      <Col className="col-12 py-2 px-3 mx-auto d-flex justify-content-center">
-        <input onKeyUp={keyCheck} type="text" id="task-input"></input>
-        <div className="ps-2">
-          <Button onClick={addTask}>-&gt;</Button>
-        </div>
-      </Col>
-    </Row>
+    <Container className="py-4 px-2">
+      <Row className='py-2 border'>
+        <Col className="col-12 py-2 px-3 mx-auto d-flex justify-content-center">
+          <input onKeyUp={keyCheck} type="text" id="task-input"></input>
+          <div className="ps-2">
+            <Button onClick={addTask}>-&gt;</Button>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   )
 }
 
@@ -248,7 +267,7 @@ function TaskList(props) {
   const taskElements = props.state
 
   return (
-    <Container className="task-list py-2 px-1">
+    <Container className="task-list py-2 px-1 border" id="the-task-list">
       {taskElements}
     </Container>
   )
@@ -277,7 +296,6 @@ function TaskManager() {
     //updates task elements specifically without touching the actual underlying data
     //needs to also disable the relevant button
     const setTaskElements = globalSetTaskElements
-    const setTaskCount = globalSetTaskCount
 
     setAllDisabled(false) //enable all by default
     setActiveDisabled(false)
@@ -293,6 +311,7 @@ function TaskManager() {
           }
         })
         setActiveDisabled(true)
+        current_tab = "active"
         break;
       case "complete":
         new_tasks = new_tasks.filter((task) => {
@@ -301,36 +320,45 @@ function TaskManager() {
           }
         })
         setCompletedDisabled(true)
+        current_tab = "complete"
         break;
       default: //all
         setAllDisabled(true)
+        current_tab = "all"
         break;
     }
 
     setTaskElements(constructTaskElements(new_tasks))
-    setTaskCount(new_tasks.length)
   }
+
+  globalDisplayTab = displayTab
 
   return (
     <>
-    <Row className="px-1 py-1">
-      <Col className='col-12 d-flex justify-content-center'>
-        <p className='my-auto'>{task_count + " Left"}</p>
-        <Button variant="link" onClick={deleteCompleted}>Clear Completed</Button>
-      </Col>
-    </Row>
-    <Row className="d-flex justify-content-center px-1 py-1">
-      <Col className="col-12">
-        <Button variant="link" onClick={() => {displayTab("all")}} disabled={all_disabled}>All</Button>
-        <Button variant="link" onClick={() => {displayTab("active")}} disabled={active_disabled}>Active</Button>
-        <Button variant="link" onClick={() => {displayTab("complete")}} disabled={completed_disabled}>Completed</Button>
-      </Col>
-    </Row>
-    <Row>
-      <Col className='mx-auto col-6 px-5 py-1'>
-        <Nuke />
-      </Col>
-    </Row>
+      <Container>
+        <Row className="d-flex justify-content-center px-1 py-1 border border-top-0">
+          <Col className="col-12">
+            <Button variant="link" onClick={() => {displayTab("all")}} disabled={all_disabled}>All</Button>
+            <Button variant="link" onClick={() => {displayTab("active")}} disabled={active_disabled}>Active</Button>
+            <Button variant="link" onClick={() => {displayTab("complete")}} disabled={completed_disabled}>Completed</Button>
+          </Col>
+        </Row>
+      </Container>
+      <Container className="py-3">
+        <Row className="px-1 py-1 border">
+          <Col className='col-12 d-flex justify-content-center'>
+            <p className='my-auto'>{task_count + " Left"}</p>
+            <Button variant="link" onClick={deleteCompleted}>Clear Completed</Button>
+          </Col>
+        </Row>
+      </Container>
+      <Container>
+        <Row className="pt-3">
+          <Col className='mx-auto col-6 col-lg-4 px-5 py-1'>
+            <Nuke tabfunc={displayTab}/>
+          </Col>
+        </Row>
+      </Container>
     </>
   )
 }
@@ -353,8 +381,8 @@ function App() {
   return (
     <>
       <Title />
-      <Container className="p-1 border container-fluid">
-        <TaskInput state={tasks} />
+      <Container className="p-1 container-fluid">
+        <TaskInput />
         <TaskList state={taskElements} />
         <TaskManager />
       </Container>
