@@ -1,15 +1,15 @@
-import './App.css'
+import './App.css';
 
-import { useState } from 'react'
-import { useEffect } from 'react'
-import { useReducer } from 'react'
+import { useState } from 'react';
 
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
-import Container from "react-bootstrap/Container"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
-import Button from "react-bootstrap/Button"
+import { GoArrowRight } from "react-icons/go";
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 
 // Components:
   //TaskInput
@@ -256,7 +256,7 @@ function TaskInput() {
         <Col className="col-12 py-2 px-3 mx-auto d-flex justify-content-center">
           <input className="box-shadow" onKeyUp={keyCheck} type="text" id="task-input"></input>
           <div className="ps-2">
-            <Button className="box-shadow" onClick={addTask}>-&gt;</Button>
+            <Button className="box-shadow" onClick={addTask}><GoArrowRight className='mx-auto my-auto'/></Button>
           </div>
         </Col>
       </Row>
