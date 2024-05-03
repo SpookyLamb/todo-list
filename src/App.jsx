@@ -184,13 +184,13 @@ function Task(props) {
 
   return (
     <Row className="px-4 py-1">
-      <Col className="col-2">
-        <input onChange={checkOff} type="checkbox" checked={checked}></input>
+      <Col className="col-2 col-lg-2">
+        <input className="checkbox my-auto" onChange={checkOff} type="checkbox" checked={checked}></input>
       </Col>
-      <Col className="col-8 text-start">
-        <p className={style}>{title}</p>
+      <Col className="col-6 col-lg-8 text-start">
+        <p className={style + " open-sans"}>{title}</p>
       </Col>
-      <Col className="col-2 d-flex justify-content-end">
+      <Col className="col-4 col-lg-2 d-flex justify-content-end">
         <a className="pe-1" onClick={editMode} href="#">Edit</a>
         <a className="ps-1" onClick={deleteMe} href="#">Delete</a>
       </Col>
@@ -354,7 +354,7 @@ function TaskManager() {
         </Row>
       </Container>
       <Container>
-        <Row className="pt-3">
+        <Row className="pt-2">
           <Col className='mx-auto col-6 col-lg-4 px-5 py-1'>
             <Nuke tabfunc={displayTab}/>
           </Col>
@@ -368,7 +368,7 @@ function Title() {
   //that really is the title it's not a note
 
   return(
-    <h1>TO DO</h1>
+    <h1 className="dancing-script">TO DO</h1>
   )
 }
 
