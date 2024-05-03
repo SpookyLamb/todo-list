@@ -1,44 +1,103 @@
+body {
+  background: rgb(62,23,88) !important;
+  background: linear-gradient(0deg, rgba(76, 60, 85, 1) 0%, rgba(133, 63, 170, 1) 50%, rgba(170, 10, 255, 1) 100%) !important;
+}
+
+a {
+  color: rgba(170, 10, 255, 1) !important;
+}
+
+a:hover {
+  color: rgba(133, 63, 170, 1) !important;
+}
+
+.btn-link {
+  color: rgba(170, 10, 255, 1) !important;
+}
+
+.btn-link:hover {
+  color: rgba(133, 63, 170, 1) !important;
+}
+
+h1, p {
+  color: rgba(240,240,240,1) !important;
+}
+
+h1 {
+  text-shadow: 4px 4px 8px rgb(15,15,15);
+}
+
+p {
+  word-wrap: break-word;
+  font-size: larger;
+}
+
+
+/* <weight>: Use a value from 400 to 700 */
+
+.dancing-script {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* <weight>: Use a value from 300 to 800 */
+
+.open-sans {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+}
+
 #root {
-  max-width: 1280px;
+  width: 100%;
+  max-width: 650px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+#task-input {
+  width: 40vw;
+  max-width: 200px;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.btn-primary {
+  background: rgba(170, 10, 255, 1) !important;
+  border-color: rgba(76, 60, 85, 1) !important;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.main-box {
+  background-color: rgba(49, 45, 51, 0.9);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.box-shadow {
+  box-shadow: 5px 5px 5px rgb(15,15,15);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.text-shadow {
+  text-shadow: 1px 1px 4px rgb(15,15,15);
 }
 
-.card {
-  padding: 2em;
+.task-list {
+  max-height: 50vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
-.read-the-docs {
-  color: #888;
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.clean {
+  text-decoration: none;
 }
